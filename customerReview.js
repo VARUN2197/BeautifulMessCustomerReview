@@ -1,83 +1,81 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     const reviewsContainer = document.getElementById('reviews-container');
-
+   
     const mockReviews = [
     {
         name: 'John Doe',
         rating: 4,
-        comment: 'Great food! It exceeded my expectations.'
+        comment: 'Will definetely recommend this'
     },
     {
         name: 'Jane Smith',
         rating: 5,
-        comment: 'Excellent service. Will definitely come again!'
+        comment: 'Excellent service. Will come again!'
     },
     {
         name: 'Sam Johnson',
         rating: 3,
-        comment: 'Amazing experience.  Food and services are great.'
+        comment: 'Amazing menu and service'
     },
     {
         name: 'Emily Brown',
         rating: 5,
-        comment: 'Absolutely love it. Fast service and great quality.'
+        comment: 'Absolutely love it. Great Staff.'
+    },
+    {
+        name: 'Alex Chen',
+        rating: 4,
+        comment: 'Good food'
     }
-    // Add more review objects as needed...
-    ];
+];
 
-    // Function to fetch a specific number of unique reviews
-    function fetchReviewsData(numReviews = 1) {
-        const apiUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJAQDAttYLxkcRIrFRzxtbtMQ&key=AIzaSyDVQxparNClDKwkS4g-K2i5qK7Z-KlNmyI'; // Replace with your API endpoint
-        return fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch reviews');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Extract a specific number of reviews
-                const reviews = data.slice(0, numReviews);
-                return reviews;
-            });
-    }
+function fetchReviewsData(numReviews = 3) {
+	const uniqueReviews = [];
+  const reviewIndices = new Set();
 
-    // Define the getReviews function as before
-    function getReviews(reviews) {
-        const reviewsContainer = document.getElementById('reviews-container');
+  while (uniqueReviews.length < numReviews && reviewIndices.size < mockReviews.length) {
+       const randomIndex = Math.floor(Math.random() * mockReviews.length);
+       if (!reviewIndices.has(randomIndex)) {
+                reviewIndices.add(randomIndex);
+           uniqueReviews.push(mockReviews[randomIndex]);
+       }
+  }
+  return uniqueReviews;
+}
 
-        // Clear existing reviews in the container
-        reviewsContainer.innerHTML = '';
+// Define the getReviews function as before
+function getReviews(reviews) {
+    const reviewsContainer = document.getElementById('reviews-container');
 
-        reviews.forEach((review) => {
-            const reviewDiv = document.createElement('div');
-            reviewDiv.classList.add('review');
+    // Clear existing reviews in the container
+    reviewsContainer.innerHTML = '';
 
-            const ratingStars = '⭐️'.repeat(review.rating);
+    reviews.forEach((review) => {
+        const reviewDiv = document.createElement('div');
+        reviewDiv.classList.add('review');
 
-            reviewDiv.innerHTML = `
-                <h1 style="text-align: center;"><q> ${review.comment} </q></h1>
-                <h4 style="float: right;">${review.name}</h4>
-            `;
+        const ratingStars = '⭐️'.repeat(review.rating);
 
-            reviewsContainer.appendChild(reviewDiv); // Append new review to the container
-        });
-    }
+        reviewDiv.innerHTML = `
+            <h3>${review.comment}</h3>
+            <h5>${review.name}</h5>
+            <div>${ratingStars}</div>
+        `;
 
-    // Function to update reviews every 5 seconds
-    function updateReviewsPeriodically() {
-        fetchReviewsData(1) // Fetch 3 unique reviews
-            .then(reviews => {
-                getReviews(reviews);
-            })
-            .catch(error => {
-                console.error('Error fetching reviews:', error);
-            });
-    }
+        reviewsContainer.appendChild(reviewDiv); // Append new review to the container
+    });
+}
 
-    // Call updateReviewsPeriodically initially and then every 5 seconds
-    updateReviewsPeriodically(); // Call immediately upon page load
-    setInterval(updateReviewsPeriodically, 3000);
+// Function to update reviews every 5 seconds
+function updateReviewsPeriodically() {
+		var reviews = fetchReviewsData(3); // Fetch 3 unique reviews
+    getReviews(reviews);
+}
+
+// Call updateReviewsPeriodically initially and then every 5 seconds
+updateReviewsPeriodically(); // Call immediately upon page load
+setInterval(updateReviewsPeriodically, 5000); // 
+    
+    
 });
-
