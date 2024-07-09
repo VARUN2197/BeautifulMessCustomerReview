@@ -10,15 +10,21 @@
             padding: 20px;
         }
         #reviews-container {
-            max-width: 600px;
+            max-width: 60%;
             margin: 0 auto;
+            font-size: 2.5rem;
             font-family: 'georgia',
-            font-size: '2rem'
         }
         .review {
-            border-bottom: 1px solid #ccc;
             padding: 10px 0;
             margin-bottom: 10px;
+        }
+        .w3-animate-opacity {
+          animation: opac 4s;
+        }
+        @keyframes opac {
+            from {opacity: 0;}
+            to {opacity: 1;}
         }
     </style>
 </head>
@@ -28,7 +34,89 @@
     <div id="reviews-container">
      
     </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+    const reviewsContainer = document.getElementById('reviews-container');
+
+    const mockReviews = [
+    {
+        name: 'John Doe',
+        rating: 4,
+        comment: 'Will definetely recommend this'
+    },
+    {
+        name: 'Jane Smith',
+        rating: 5,
+        comment: 'Excellent service. Will come again!'
+    },
+    {
+        name: 'Sam Johnson',
+        rating: 3,
+        comment: 'Amazing menu and service'
+    },
+    {
+        name: 'Emily Brown',
+        rating: 5,
+        comment: 'Absolutely love it. Great Staff.'
+    },
+    {
+        name: 'Alex Chen',
+        rating: 4,
+        comment: 'Good food'
+    }
+    ];
+
+    function fetchReviewsData(numReviews = 1) {
+    const uniqueReviews = [];
+    const reviewIndices = new Set();
+
+    while (uniqueReviews.length < numReviews && reviewIndices.size < mockReviews.length) {
+    const randomIndex = Math.floor(Math.random() * mockReviews.length);
+    if (!reviewIndices.has(randomIndex)) {
+                reviewIndices.add(randomIndex);
+        uniqueReviews.push(mockReviews[randomIndex]);
+    }
+    }
+    return uniqueReviews;
+    }
+
+    // Define the getReviews function as before
+    function getReviews(reviews) {
+    const reviewsContainer = document.getElementById('reviews-container');
+
+    // Clear existing reviews in the container
+    reviewsContainer.innerHTML = '';
+
+    reviews.forEach((review) => {
+        const reviewDiv = document.createElement('div');
+        reviewDiv.classList.add('review');
+        reviewDiv.classList.add('w3-animate-opacity');
+
+        const ratingStars = '⭐️'.repeat(review.rating);
+
+        reviewDiv.innerHTML = `
+            <h1 style="text-align: center;"><q>${review.comment}</q></h1>
+            <h4 style="text-align: right;">${review.name}</h4>
+        `;
+
+        reviewsContainer.appendChild(reviewDiv); // Append new review to the container
+    });
+    }
+
+    // Function to update reviews every 5 seconds
+    function updateReviewsPeriodically() {
+        var reviews = fetchReviewsData(1); // Fetch 1 unique reviews
+    getReviews(reviews);
+    }
+
+    // Call updateReviewsPeriodically initially and then every 5 seconds
+    updateReviewsPeriodically(); // Call immediately upon page load
+    setInterval(updateReviewsPeriodically, 5000); // 
+
+
+    });
+</script>
