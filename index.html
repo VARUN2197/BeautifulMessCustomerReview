@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Beautiful Mess</title>
+    <style>
+        /* Basic styling for demo purposes */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #reviews-container {
+            max-width: 60%;
+            margin: 0 auto;
+            font-size: 2.5rem;
+            font-family: 'georgia',
+        }
+        .review {
+            padding: 10px 0;
+            margin-bottom: 10px;
+        }
+        .w3-animate-opacity {
+          animation: opac 6s;
+        }
+        @keyframes opac {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+    </style>
+</head>
+<body>
+    <h1>A Beautiful Mess</h1>
+
+    <div id="reviews-container">
+     
+    </div>
+</body>
+</html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const reviewsContainer = document.getElementById('reviews-container');
+      let reviewIndices = [];
+
+      async function fetchReviewsData() {
+        if (reviewIndices.length === 0) {
+          try {
+            const response = await fetch('http://localhost:3000/reviews');
+            const data = await response.json();
+            if (response.statusText === 'OK') {
+              reviewIndices = data.filter(review => review.rating >= 4);
+            } else {
+              console.error('Error fetching data:', response.status);
+              return [];
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            return [];
+          }
+        }
+
+        const uniqueReviews = reviewIndices.pop();
+
+        return uniqueReviews;
+      }
+
+      function displayReviews(review) {
+        reviewsContainer.innerHTML = ''; // Clear existing reviews
+        const reviewDiv = document.createElement('div');
+        reviewDiv.classList.add('review', 'w3-animate-opacity');
+
+        const ratingStars = '⭐️'.repeat(review.rating);
+
+        reviewDiv.innerHTML = `
+        <h3 style="text-align: center;">${ratingStars}</h3>
+        <h3 style="text-align: center;"><q>${review.text}</q></h3>
+        <h4 style="text-align: right;">${review.author_name}</h4>
+        `;
+
+        reviewsContainer.appendChild(reviewDiv);
+      }
+
+      async function updateReviewsPeriodically() {
+        const reviews = await fetchReviewsData();
+        displayReviews(reviews);
+      }
+
+      // Call updateReviewsPeriodically initially and then every 8 seconds
+      updateReviewsPeriodically(); // Call immediately upon page load
+      setInterval(updateReviewsPeriodically, 8000); // Call every 8 seconds
+    });
+
+</script>
