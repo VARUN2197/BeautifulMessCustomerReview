@@ -251,14 +251,14 @@ function getReviews(reviews) {
     // Clear existing reviews in the container
     reviewsContainer.innerHTML = '';
 
-    reviews.forEach((review) => {
+    reviews.forEach((reviewObj) => {
         const reviewDiv = document.createElement('div');
         reviewDiv.classList.add('review');
 
 
         reviewDiv.innerHTML = `
-            <h3>${review.comment}</h3>
-            <h5>${review.name}</h5>
+            <h3>${reviewObj.review}</h3>
+            <h5>${reviewObj.name}</h5>
         `;
 
         reviewsContainer.appendChild(reviewDiv); // Append new review to the container
