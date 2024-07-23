@@ -289,15 +289,15 @@
     // Clear existing reviews in the container
     reviewsContainer.innerHTML = '';
 
-    reviews.forEach((review) => {
+    reviews.forEach((reviewObj) => {
         const reviewDiv = document.createElement('div');
         reviewDiv.classList.add('review');
         reviewDiv.classList.add('w3-animate-opacity');
 
 
         reviewDiv.innerHTML = `
-            <h1 style="text-align: center;"><q>${review.review}</q></h1>
-            <h4 style="text-align: right;">${review.name}</h4>
+            <h1 style="text-align: center;"><q>${reviewObj.review}</q></h1>
+            <h4 style="text-align: right;">${reviewObj.name}</h4>
         `;
 
         reviewsContainer.appendChild(reviewDiv); // Append new review to the container
