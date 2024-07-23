@@ -226,9 +226,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
 	
 
-function fetchReviewsData(numReviews = 3) {
-	const uniqueReviews = [];
+function fetchReviewsData(numReviews = 1) {
+  const uniqueReviews = [];
   const reviewIndices = new Set();
+  if(reviewIndices.size == mockReviews.length) {
+	  reviewIndices.clear();
+  }
 
   while (uniqueReviews.length < numReviews && reviewIndices.size < mockReviews.length) {
        const randomIndex = Math.floor(Math.random() * mockReviews.length);
@@ -237,6 +240,7 @@ function fetchReviewsData(numReviews = 3) {
            uniqueReviews.push(mockReviews[randomIndex]);
        }
   }
+
   return uniqueReviews;
 }
 
@@ -263,13 +267,13 @@ function getReviews(reviews) {
 
 // Function to update reviews every 5 seconds
 function updateReviewsPeriodically() {
-		var reviews = fetchReviewsData(3); // Fetch 3 unique reviews
+		var reviews = fetchReviewsData(1); // Fetch 3 unique reviews
     getReviews(reviews);
 }
 
-// Call updateReviewsPeriodically initially and then every 5 seconds
+// Call updateReviewsPeriodically initially and then every 8 seconds
 updateReviewsPeriodically(); // Call immediately upon page load
-setInterval(updateReviewsPeriodically, 5000); // 
+setInterval(updateReviewsPeriodically, 8000); // 
     
     
 });
